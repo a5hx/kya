@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KYA · Know Your Agent</title>
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">KYA</div>
+    <div>
+      <div class="title">Know Your Agent</div>
+      <div class="subtitle">Bank-side verification of AI agents · UPI-AutoPay-style mandates · synthetic data only</div>
+    </div>
+  </div>
+  <nav class="tabs">
+    <button class="tab active" data-tab="live">Live demo</button>
+    <button class="tab" data-tab="audit">Audit log <span id="chainDot" class="dot ok"></span></button>
+    <button class="tab" data-tab="eval">Eval</button>
+  </nav>
+  <div class="top-actions">
+    <span id="transportBadge" class="chip mono" title="How the agent reaches the bank">MCP</span>
+    <button id="resetBtn" class="btn ghost small">Reset demo</button>
+  </div>
+</header>
+
+<main id="tab-live" class="tabpane active">
+  <div class="grid3">
+    <!-- 1. HUMAN -->
+    <section class="panel">
+      <div class="panel-head"><span class="step">1</span><div><h2>Human</h2><p>Verified account holder</p></div></div>
+      <div class="panel-body">
+        <div class="idcard">
+          <div class="ribbon">SYNTHETIC · NOT A REAL DOCUMENT</div>
+          <div class="idrow">
+            <div id="idPhoto" class="idphoto">AD</div>
+            <div class="idinfo">
+              <div class="idname" id="userName">—</div>
+              <div class="kv"><span>ID no.</span><b class="mono" id="userIdNo">—</b></div>
+              <div class="kv"><span>DOB</span><b id="userDob">—</b></div>
+              <div class="kv"><span>KYC ref</span><b class="mono" id="userKyc">—</b></div>
+              <div class="kv"><span>Face</span><b id="faceStatus">—</b></div>
+            </div>
+          </div>
+          <button id="enrollBtn" class="btn small">Verify me with camera</button>
+        </div>
+
+        <div class="balance"><span>Account <b class="mono" id="acct">—</b></span><span class="amt" id="balance">₹—</span></div>
+
+        <div class="mandate" id="mandateCard">
+          <div class="mandate-head">
+            <div><div class="eyebrow">Agent mandate</div><div class="mandate-title">AutoPay for my AI agent</div></div>
+            <span id="mandateStatus" class="pill ok">ACTIVE</span>
+          </div>
+          <div class="mrow"><span>Agent</span><b id="mAgent">—</b></div>
+          <div class="mrow"><span>Per payment cap</span><b id="mCap">—</b></div>
+          <div class="mrow col"><div class="split"><span>30-day limit</span><b id="mCum">—</b></div><div class="bar"><div id="mCumBar"></div></div></div>
+          <div class="mrow"><span>Face check above</span><b id="mStep">—</b></div>
+          <div class="mrow"><span>Allowed</span><div id="mMcc" class="chips"></div></div>
+          <div class="mrow"><span>Valid until</span><b id="mExp">—</b></div>
+          <div class="mrow"><span>Purpose (consent)</span><b id="mPurpose">—</b></div>
+          <div class="sig mono" id="mSig">—</div>
+          <div class="btnrow">
+            <button id="revokeBtn" class="btn danger small">Revoke</button>
+            <button id="withdrawBtn" class="btn ghost small" title="DPDP: withdraw consent and erase biometrics">Withdraw consent</button>
+            <button id="regrantBtn" class="btn small hidden">Grant new mandate</button>
+          </div>
+        </div>
+
+        <div class="section-label">Notifications</div>
+        <ul id="notifs" class="notifs"><li class="muted">Nothing yet.</li></ul>
+      </div>
+    </section>
+
+    <!-- 2. AGENT -->
+    <section class="panel">
+      <div class="panel-head"><span class="step">2</span><div><h2>Personal agent</h2><p>Untrusted: model + signing runtime</p></div></div>
+      <div class="panel-body">
+        <div class="controls">
+          <label class="select">Agent
+            <select id="agentSel"><option value="scripted">Scripted (offline)</option><option value="claude">Claude</option></select>
+          </label>
+          <label class="toggle"><input type="checkbox" id="poisonTgl"><span></span>Poisoned web page</label>
+        </div>
+        <div id="taskChips" class="taskchips"></div>
+        <form id="askForm" class="ask">
+          <input id="askInput" placeholder="Ask the agent… e.g. order dinner from Tiffin Express" autocomplete="off">
+          <button class="btn small">Send</button>
+        </form>
+        <div id="transcript" class="transcript"><div class="muted center pad">Pick a task. Turn on <b>Poisoned web page</b> to hide a prompt injection in FreshMart's product page.</div></div>
+
+        <div class="section-label">Attack lab <span class="muted">· each attack is caught at a different layer</span></div>
+        <div id="attacks" class="attacks"></div>
+      </div>
+    </section>
+
+    <!-- 3. BANK VERIFIER -->
+    <section class="panel">
+      <div class="panel-head"><span class="step">3</span><div><h2>Bank verifier</h2><p>DemoBank · every request, every layer</p></div></div>
+      <div class="panel-body">
+        <div id="decision" class="decision idle">
+          <div class="req" id="reqSummary">Waiting for a request…</div>
+          <div class="outcome" id="outcome"></div>
+          <div class="reason" id="reason"></div>
+        </div>
+        <ol id="checks" class="checks"></ol>
+        <div id="riskBox" class="risk hidden">
+          <div class="split"><span class="section-label flat">Behaviour risk</span><b id="riskScore">0 / 50</b></div>
+          <div class="bar risk-bar"><div id="riskBar"></div><i id="riskThresh"></i></div>
+          <ul id="riskFeatures" class="features"></ul>
+        </div>
+        <div class="section-label">Decision history</div>
+        <ul id="history" class="history"></ul>
+      </div>
+    </section>
+  </div>
+</main>
+
+<main id="tab-audit" class="tabpane">
+  <div class="audit-wrap">
+    <div id="chainBanner" class="banner ok">Chain valid</div>
+    <div class="audit-controls">
+      <label>Entry # <input type="number" id="tamperSeq" min="1" value="3"></label>
+      <button class="btn small danger" data-tamper="edit">Edit entry</button>
+      <button class="btn small danger" data-tamper="rehash">Edit + recompute its hash</button>
+      <button class="btn small danger" data-tamper="delete">Delete entry</button>
+      <button class="btn small danger" data-tamper="truncate">Truncate last 2</button>
+      <span class="muted">Simulates an insider with write access to the database.</span>
+    </div>
+    <table class="audit">
+      <thead><tr><th>#</th><th>Time</th><th>Event</th><th>Details</th><th>prev_hash</th><th>hash</th><th></th></tr></thead>
+      <tbody id="auditRows"></tbody>
+    </table>
+  </div>
+</main>
+
+<main id="tab-eval" class="tabpane">
+  <div class="audit-wrap" id="evalWrap"><p class="muted">Run <code>uv run python -m evals.run_eval</code> to generate results.</p></div>
+</main>
+
+<!-- Step-up / enrollment modal -->
+<div id="modal" class="modal hidden">
+  <div class="sheet">
+    <div class="sheet-head"><div><div class="eyebrow" id="mdEyebrow">DemoBank · step-up</div><h3 id="mdTitle">Confirm it's you</h3></div><button class="x" id="mdClose">×</button></div>
+    <div id="mdBody" class="sheet-body"></div>
+    <div class="cam hidden" id="camWrap">
+      <video id="cam" autoplay playsinline muted></video>
+      <div class="cam-overlay"><div id="camArrow" class="arrow"></div><div id="camMsg" class="cam-msg"></div></div>
+    </div>
+    <div id="mdResult" class="md-result hidden"></div>
+    <div id="mdActions" class="btnrow wrap"></div>
+  </div>
+</div>
+
+<canvas id="grab" width="320" height="240" hidden></canvas>
+<script src="/static/app.js"></script>
+</body>
+</html>

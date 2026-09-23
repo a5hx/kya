@@ -21,7 +21,8 @@ CREATE TABLE IF NOT EXISTS txns(
   amount_inr INTEGER, ts INTEGER, source TEXT, status TEXT);
 CREATE TABLE IF NOT EXISTS stepups(
   challenge_id TEXT PRIMARY KEY, mandate_id TEXT, user_id TEXT, request_hash TEXT, envelope TEXT,
-  direction TEXT, status TEXT, attempts INTEGER, created_at INTEGER, resolved_at INTEGER, detail TEXT);
+  direction TEXT, status TEXT, attempts INTEGER, created_at INTEGER, resolved_at INTEGER, detail TEXT,
+  resolution TEXT);
 CREATE TABLE IF NOT EXISTS audit(seq INTEGER PRIMARY KEY, ts INTEGER, kind TEXT, payload TEXT, prev_hash TEXT, hash TEXT);
 CREATE TABLE IF NOT EXISTS checkpoints(seq INTEGER PRIMARY KEY, head_hash TEXT, sig TEXT, ts INTEGER);
 CREATE TABLE IF NOT EXISTS kv(key TEXT PRIMARY KEY, value TEXT);

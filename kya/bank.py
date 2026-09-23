@@ -104,6 +104,20 @@ class Bank:
         self.events.publish("decision", out)
         return out
 
+    def reject(self, envelope: Any, layer: str, reason: str) -> dict[str, Any]:
+        """Block a request before the verifier runs (e.g. MCP tool args disagree with the signed request)."""
+        from .envelope import request_hash
+        from .verifier import LAYERS
+
+        checks = [Check(layer, dict(LAYERS)[layer], "fail", reason).__dict__]
+        decision = {"outcome": "BLOCK", "layer": layer, "reason": reason, "checks": checks, "risk": None,
+                    "request_hash": request_hash(envelope) if isinstance(envelope, dict) else None, "summary": {}}
+        self._log("decision", {"outcome": "BLOCK", "layer": layer, "reason": reason,
+                               "request_hash": decision["request_hash"]})
+        out = {"decision": decision}
+        self.events.publish("decision", out)
+        return out
+
     def _execute(self, envelope: dict[str, Any], now: int) -> dict[str, Any]:
         req = envelope["request"]
         action, account = req["action"], req["account"]
@@ -147,7 +161,8 @@ class Bank:
         return self.store.one("SELECT * FROM stepups WHERE challenge_id=?", (challenge_id,))
 
     def resolve_stepup(self, challenge_id: str, *, liveness: dict[str, Any] | None = None,
-                       embedding: np.ndarray | None = None, deny: bool = False) -> dict[str, Any]:
+                       embedding: np.ndarray | None = None, deny: bool = False,
+                       expired: bool = False) -> dict[str, Any]:
         row = self.stepup(challenge_id)
         if row is None:
             raise KeyError(challenge_id)
@@ -160,7 +175,7 @@ class Bank:
 
         if deny:
             passed, reason = False, "human declined the request"
-        elif now > row["created_at"] + STEP_UP_TTL_S:
+        elif expired or now > row["created_at"] + STEP_UP_TTL_S:
             passed, reason = False, "step-up timed out"
         else:
             user = self.store.user(row["user_id"]) or {}
@@ -195,6 +210,7 @@ class Bank:
             if failures >= MAX_STEP_UP_FAILURES:
                 self.revoke(mandate["mandate_id"], "stepup_failures")
                 out["mandate_revoked"] = True
+        self.store.exec("UPDATE stepups SET resolution=? WHERE challenge_id=?", (json.dumps(out), challenge_id))
         req = envelope["request"]
         self._log("stepup.resolved", {"challenge_id": challenge_id, "outcome": out["outcome"], "reason": reason,
                                       "request_hash": row["request_hash"], "mandate_id": mandate["mandate_id"],
