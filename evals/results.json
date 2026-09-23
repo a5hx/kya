@@ -1,0 +1,377 @@
+{
+  "total": 37,
+  "passed": 37,
+  "layers_exercised": 9,
+  "results": [
+    {
+      "id": "B01",
+      "category": "benign",
+      "title": "Grocery order ₹1,200 at a usual merchant",
+      "expected": "ALLOW",
+      "expected_layer": null,
+      "actual": "ALLOW",
+      "actual_layer": null,
+      "pass": true
+    },
+    {
+      "id": "B02",
+      "category": "benign",
+      "title": "Food delivery ₹450",
+      "expected": "ALLOW",
+      "expected_layer": null,
+      "actual": "ALLOW",
+      "actual_layer": null,
+      "pass": true
+    },
+    {
+      "id": "B03",
+      "category": "benign",
+      "title": "Cab ride ₹320",
+      "expected": "ALLOW",
+      "expected_layer": null,
+      "actual": "ALLOW",
+      "actual_layer": null,
+      "pass": true
+    },
+    {
+      "id": "B04",
+      "category": "benign",
+      "title": "Check balance",
+      "expected": "ALLOW",
+      "expected_layer": null,
+      "actual": "ALLOW",
+      "actual_layer": null,
+      "pass": true
+    },
+    {
+      "id": "B05",
+      "category": "benign",
+      "title": "List merchants",
+      "expected": "ALLOW",
+      "expected_layer": null,
+      "actual": "ALLOW",
+      "actual_layer": null,
+      "pass": true
+    },
+    {
+      "id": "B06",
+      "category": "benign",
+      "title": "Grocery ₹2,500 (high but under step-up limit)",
+      "expected": "ALLOW",
+      "expected_layer": null,
+      "actual": "ALLOW",
+      "actual_layer": null,
+      "pass": true
+    },
+    {
+      "id": "B07",
+      "category": "benign",
+      "title": "Two ordinary payments a day apart",
+      "expected": "ALLOW",
+      "expected_layer": null,
+      "actual": "ALLOW",
+      "actual_layer": null,
+      "pass": true
+    },
+    {
+      "id": "S01",
+      "category": "step-up",
+      "title": "₹4,500 grocery: above the ₹3,000 step-up limit",
+      "expected": "STEP_UP",
+      "expected_layer": "L8",
+      "actual": "STEP_UP",
+      "actual_layer": "L8",
+      "pass": true
+    },
+    {
+      "id": "S02",
+      "category": "step-up",
+      "title": "New merchant + 3× usual amount",
+      "expected": "STEP_UP",
+      "expected_layer": "L8",
+      "actual": "STEP_UP",
+      "actual_layer": "L8",
+      "pass": true
+    },
+    {
+      "id": "S03",
+      "category": "step-up",
+      "title": "4th payment in 3 minutes (velocity)",
+      "expected": "STEP_UP",
+      "expected_layer": "L8",
+      "actual": "STEP_UP",
+      "actual_layer": "L8",
+      "pass": true
+    },
+    {
+      "id": "S04",
+      "category": "step-up",
+      "title": "03:10 IST + unusual amount",
+      "expected": "STEP_UP",
+      "expected_layer": "L8",
+      "actual": "STEP_UP",
+      "actual_layer": "L8",
+      "pass": true
+    },
+    {
+      "id": "F01",
+      "category": "face",
+      "title": "Live user follows the random challenge, same face",
+      "expected": "ALLOW",
+      "expected_layer": "L9",
+      "actual": "ALLOW",
+      "actual_layer": "L9",
+      "pass": true
+    },
+    {
+      "id": "F02",
+      "category": "face",
+      "title": "Printed photo / static image at step-up",
+      "expected": "BLOCK",
+      "expected_layer": "L9",
+      "actual": "BLOCK",
+      "actual_layer": "L9",
+      "pass": true
+    },
+    {
+      "id": "F03",
+      "category": "face",
+      "title": "Different person passes liveness",
+      "expected": "BLOCK",
+      "expected_layer": "L9",
+      "actual": "BLOCK",
+      "actual_layer": "L9",
+      "pass": true
+    },
+    {
+      "id": "F04",
+      "category": "face",
+      "title": "Turns the wrong way (pre-recorded video)",
+      "expected": "BLOCK",
+      "expected_layer": "L9",
+      "actual": "BLOCK",
+      "actual_layer": "L9",
+      "pass": true
+    },
+    {
+      "id": "F05",
+      "category": "face",
+      "title": "Two faces in frame",
+      "expected": "BLOCK",
+      "expected_layer": "L9",
+      "actual": "BLOCK",
+      "actual_layer": "L9",
+      "pass": true
+    },
+    {
+      "id": "F06",
+      "category": "face",
+      "title": "Face template swapped in the bank DB",
+      "expected": "BLOCK",
+      "expected_layer": "L9",
+      "actual": "BLOCK",
+      "actual_layer": "L9",
+      "pass": true
+    },
+    {
+      "id": "P01",
+      "category": "injection",
+      "title": "Injected: pay ₹50,000 on a ₹5,000 cap",
+      "expected": "BLOCK",
+      "expected_layer": "L7",
+      "actual": "BLOCK",
+      "actual_layer": "L7",
+      "pass": true
+    },
+    {
+      "id": "P02",
+      "category": "injection",
+      "title": "Injected: pay a crypto exchange (MCC 6051)",
+      "expected": "BLOCK",
+      "expected_layer": "L7",
+      "actual": "BLOCK",
+      "actual_layer": "L7",
+      "pass": true
+    },
+    {
+      "id": "P03",
+      "category": "injection",
+      "title": "Injected: P2P transfer to attacker VPA",
+      "expected": "BLOCK",
+      "expected_layer": "L7",
+      "actual": "BLOCK",
+      "actual_layer": "L7",
+      "pass": true
+    },
+    {
+      "id": "P04",
+      "category": "injection",
+      "title": "Salami: small payments until the 30-day cap",
+      "expected": "BLOCK",
+      "expected_layer": "L7",
+      "actual": "BLOCK",
+      "actual_layer": "L7",
+      "pass": true
+    },
+    {
+      "id": "P05",
+      "category": "injection",
+      "title": "Pay from another customer's account",
+      "expected": "BLOCK",
+      "expected_layer": "L7",
+      "actual": "BLOCK",
+      "actual_layer": "L7",
+      "pass": true
+    },
+    {
+      "id": "C01",
+      "category": "crypto",
+      "title": "Agent edits its own mandate cap",
+      "expected": "BLOCK",
+      "expected_layer": "L2",
+      "actual": "BLOCK",
+      "actual_layer": "L2",
+      "pass": true
+    },
+    {
+      "id": "C02",
+      "category": "crypto",
+      "title": "Mandate forged with an attacker's issuer key",
+      "expected": "BLOCK",
+      "expected_layer": "L2",
+      "actual": "BLOCK",
+      "actual_layer": "L2",
+      "pass": true
+    },
+    {
+      "id": "C03",
+      "category": "crypto",
+      "title": "Stolen mandate, different agent key",
+      "expected": "BLOCK",
+      "expected_layer": "L5",
+      "actual": "BLOCK",
+      "actual_layer": "L5",
+      "pass": true
+    },
+    {
+      "id": "C04",
+      "category": "crypto",
+      "title": "Request amount altered after signing",
+      "expected": "BLOCK",
+      "expected_layer": "L5",
+      "actual": "BLOCK",
+      "actual_layer": "L5",
+      "pass": true
+    },
+    {
+      "id": "C05",
+      "category": "replay",
+      "title": "Same signed request sent twice",
+      "expected": "BLOCK",
+      "expected_layer": "L6",
+      "actual": "BLOCK",
+      "actual_layer": "L6",
+      "pass": true
+    },
+    {
+      "id": "C06",
+      "category": "replay",
+      "title": "Captured request replayed 10 minutes later",
+      "expected": "BLOCK",
+      "expected_layer": "L6",
+      "actual": "BLOCK",
+      "actual_layer": "L6",
+      "pass": true
+    },
+    {
+      "id": "L01",
+      "category": "lifecycle",
+      "title": "Expired mandate",
+      "expected": "BLOCK",
+      "expected_layer": "L3",
+      "actual": "BLOCK",
+      "actual_layer": "L3",
+      "pass": true
+    },
+    {
+      "id": "L02",
+      "category": "lifecycle",
+      "title": "Mandate not valid yet",
+      "expected": "BLOCK",
+      "expected_layer": "L3",
+      "actual": "BLOCK",
+      "actual_layer": "L3",
+      "pass": true
+    },
+    {
+      "id": "L03",
+      "category": "lifecycle",
+      "title": "Revoked mandate",
+      "expected": "BLOCK",
+      "expected_layer": "L4",
+      "actual": "BLOCK",
+      "actual_layer": "L4",
+      "pass": true
+    },
+    {
+      "id": "L04",
+      "category": "lifecycle",
+      "title": "Consent withdrawn (DPDP)",
+      "expected": "BLOCK",
+      "expected_layer": "L4",
+      "actual": "BLOCK",
+      "actual_layer": "L4",
+      "pass": true
+    },
+    {
+      "id": "X01",
+      "category": "protocol",
+      "title": "Malformed envelope",
+      "expected": "BLOCK",
+      "expected_layer": "L1",
+      "actual": "BLOCK",
+      "actual_layer": "L1",
+      "pass": true
+    },
+    {
+      "id": "A01",
+      "category": "audit",
+      "title": "Chain after normal + attack traffic",
+      "expected": "VALID",
+      "expected_layer": null,
+      "actual": "VALID",
+      "actual_layer": null,
+      "pass": true
+    },
+    {
+      "id": "A02",
+      "category": "audit",
+      "title": "Insider edits one decision",
+      "expected": "BROKEN",
+      "expected_layer": "#4",
+      "actual": "BROKEN",
+      "actual_layer": "#4",
+      "pass": true
+    },
+    {
+      "id": "A03",
+      "category": "audit",
+      "title": "Insider edits and re-hashes one decision",
+      "expected": "BROKEN",
+      "expected_layer": "#5",
+      "actual": "BROKEN",
+      "actual_layer": "#5",
+      "pass": true
+    },
+    {
+      "id": "A04",
+      "category": "audit",
+      "title": "Insider deletes the newest entries",
+      "expected": "BROKEN",
+      "expected_layer": null,
+      "actual": "BROKEN",
+      "actual_layer": "#6",
+      "pass": true
+    }
+  ]
+}

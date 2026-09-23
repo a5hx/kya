@@ -466,4 +466,8 @@ function connect() {
   const pending = STATE.pending_stepups[0];
   if (pending) openStepup({ challenge_id: pending.challenge_id, direction: pending.direction, decision: pending.detail });
   api("/api/audit").then(({ verify }) => ($("#chainDot").className = "dot " + (verify.valid ? "ok" : "bad")));
+  // ?autorun=injection plays the prompt-injection scenario on load (handy for screenshots and recordings)
+  const auto = new URLSearchParams(location.search).get("autorun");
+  if (auto === "injection") { $("#poisonTgl").checked = true; setTimeout(() => runTask("groceries"), 600); }
+  else if (auto && STATE.tasks[auto]) setTimeout(() => runTask(auto), 600);
 })();

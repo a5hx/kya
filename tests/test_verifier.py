@@ -66,6 +66,16 @@ def test_cumulative_cap(world, clock):
     assert "30-day cap" in out["decision"]["reason"]
 
 
+def test_agent_cannot_poison_its_own_baseline(world, clock):
+    for _ in range(4):  # the agent makes "unusual" payments look routine... or tries to
+        clock.t += DAY
+        world.call("pay_merchant", merchant_id="m_freshmart", amount_inr=2900)
+    clock.t += DAY
+    risk = world.call("pay_merchant", merchant_id="m_freshmart", amount_inr=2900)["decision"]["risk"]
+    unusual = next(f for f in risk["features"] if f["name"] == "unusual_amount")
+    assert unusual["hit"]  # still judged against the human's own history (median ≈ ₹942)
+
+
 def test_unknown_merchant_blocked(world):
     assert outcome(world.call("pay_merchant", merchant_id="m_nope", amount_inr=100)) == ("BLOCK", "L7")
 

@@ -101,12 +101,17 @@ class MCPTransport:
                 await session.initialize()
                 res = await session.call_tool(tool, {**params, "envelope": envelope},
                                               read_timeout_seconds=timedelta(seconds=180))
-        sc = res.structuredContent or {}
-        if "decision" in sc:
-            return sc
-        if isinstance(sc.get("result"), dict) and "decision" in sc["result"]:
-            return sc["result"]
-        return json.loads(res.content[0].text)
+        return parse_tool_result(res)
+
+
+def parse_tool_result(res) -> dict[str, Any]:
+    """A bank tool result, whether it came back as structured content or JSON text."""
+    sc = res.structuredContent or {}
+    if "decision" in sc:
+        return sc
+    if isinstance(sc.get("result"), dict) and "decision" in sc["result"]:
+        return sc["result"]
+    return json.loads(res.content[0].text)
 
 
 def strip_envelope(tool: dict[str, Any]) -> dict[str, Any]:
