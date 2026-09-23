@@ -1,0 +1,34 @@
+[project]
+name = "kya"
+version = "0.1.0"
+description = "Know Your Agent: signed, UPI-AutoPay-style mandates and a layered verifier for AI agents acting on bank accounts."
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+license = { text = "MIT" }
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "pynacl>=1.5",
+    "pydantic>=2.7",
+    "numpy>=1.26",
+    "opencv-python-headless>=4.10",
+    "mcp>=1.9",
+    "anthropic>=0.40",
+    "pyyaml>=6.0",
+    "httpx>=0.27",
+    "python-dotenv>=1.0",
+    "python-multipart>=0.0.9",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.0"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["kya"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
